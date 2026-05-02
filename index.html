@@ -2166,7 +2166,12 @@ textarea.ctrl-input { resize: vertical; min-height: 68px; }
       <strong>Case 2 — Include aᵢ:</strong> Element <code>aᵢ</code> contributes its value,
       so the remaining elements (from the first <code>i−1</code>) must cover
       <code>s − aᵢ</code>. This only makes sense when <code>s ≥ aᵢ</code>, since our
-      elements are non-negative and cannot produce negative contributions. Whether
+      elements are non-negative and cannot produce negative contributions. If the
+      non-negative integer assumption were violated — that is, if any element
+      <code>aᵢ</code> could be negative — then <code>s − aᵢ</code> could exceed
+      <code>s</code>, accessing a column index beyond the table bounds and making the
+      recurrence undefined. The entire DP formulation depends on this assumption holding.
+      Whether
       <code>s − aᵢ</code> is reachable is exactly what <code>dp[i−1][s − aᵢ]</code>
       records.
     </p>
@@ -2239,35 +2244,35 @@ textarea.ctrl-input { resize: vertical; min-height: 68px; }
         <tr>
           <td><strong>i=0</strong> (no elements)</td>
           <td style="color:var(--teal);font-weight:700">T</td>
-          <td style="color:var(--text-dim)">—</td>
-          <td style="color:var(--text-dim)">—</td>
-          <td style="color:var(--text-dim)">—</td>
-          <td style="color:var(--text-dim)">—</td>
-          <td style="color:var(--text-dim)">—</td>
+          <td style="color:var(--text-dim)">F</td>
+          <td style="color:var(--text-dim)">F</td>
+          <td style="color:var(--text-dim)">F</td>
+          <td style="color:var(--text-dim)">F</td>
+          <td style="color:var(--text-dim)">F</td>
         </tr>
         <tr>
           <td><strong>i=1</strong> (consider a₁=3)</td>
           <td style="color:var(--teal);font-weight:700">T</td>
-          <td style="color:var(--text-dim)">—</td>
-          <td style="color:var(--text-dim)">—</td>
+          <td style="color:var(--text-dim)">F</td>
+          <td style="color:var(--text-dim)">F</td>
           <td style="color:var(--teal);font-weight:700">T</td>
-          <td style="color:var(--text-dim)">—</td>
-          <td style="color:var(--text-dim)">—</td>
+          <td style="color:var(--text-dim)">F</td>
+          <td style="color:var(--text-dim)">F</td>
         </tr>
         <tr>
           <td><strong>i=2</strong> (consider a₂=1)</td>
           <td style="color:var(--teal);font-weight:700">T</td>
           <td style="color:var(--teal);font-weight:700">T</td>
-          <td style="color:var(--text-dim)">—</td>
+          <td style="color:var(--text-dim)">F</td>
           <td style="color:var(--teal);font-weight:700">T</td>
           <td style="color:var(--teal);font-weight:700">T</td>
-          <td style="color:var(--text-dim)">—</td>
+          <td style="color:var(--text-dim)">F</td>
         </tr>
         <tr>
           <td><strong>i=3</strong> (consider a₃=4)</td>
           <td style="color:var(--teal);font-weight:700">T</td>
           <td style="color:var(--teal);font-weight:700">T</td>
-          <td style="color:var(--text-dim)">—</td>
+          <td style="color:var(--text-dim)">F</td>
           <td style="color:var(--teal);font-weight:700">T</td>
           <td style="color:var(--teal);font-weight:700">T</td>
           <td style="color:var(--green);font-weight:700">T ✓</td>
@@ -2428,6 +2433,35 @@ textarea.ctrl-input { resize: vertical; min-height: 68px; }
         <li>The algorithm of choice for practical applications.</li>
       </ul>
     </div>
+  </div>
+
+  <div class="callout amber">
+    <div class="callout-label">&#11045; CLO-3C — Tractable Subclass Analysis</div>
+    <p>
+      The DP algorithm is exact and efficient only within a specific
+      <strong>tractable subclass</strong>: instances where <code>t</code>
+      is polynomially bounded in <code>n</code> — that is,
+      <code>t = O(nᵏ)</code> for some fixed constant <code>k</code>.
+      Within this subclass, <code>O(n·t) = O(nᵏ⁺¹)</code>, which is a
+      genuine polynomial and the DP runs efficiently in polynomial time.
+    </p>
+    <p style="margin-top:.6rem;">
+      <strong>Outside this subclass</strong> — when <code>t</code> grows
+      exponentially in <code>n</code> — the DP fails as a practical
+      algorithm. The precise boundary is <code>t = O(2ⁿ)</code>: once
+      <code>t</code> reaches this scale, the DP table has
+      <code>O(n · 2ⁿ)</code> cells, exponential in the input size.
+    </p>
+    <p style="margin-top:.6rem;">
+      <strong>Tight instance where DP fails outside the tractable subclass:</strong><br>
+      <code>S = {1, 2, 4, 8, …, 2ⁿ⁻¹}</code>, <code>t = 2ⁿ − 1</code>.<br>
+      Here <code>t</code> is exponential in <code>n</code>. The DP table
+      has <code>n × (2ⁿ−1)</code> cells. For <code>n = 60</code>:
+      approximately <code>6.9 × 10¹⁹</code> cells — computationally
+      infeasible despite the DP being theoretically correct. This is the
+      exact instance that sits outside the tractable subclass boundary and
+      demonstrates where the algorithm breaks down.
+    </p>
   </div>
 
   <div class="callout green" style="margin-top:1.5rem;">
