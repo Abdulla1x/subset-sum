@@ -1376,6 +1376,68 @@ textarea.ctrl-input { resize: vertical; min-height: 68px; }
 }
 .cmp-expl-inner.ci-bf { border-left: 3px solid var(--red); }
 .cmp-expl-inner.ci-dp { border-left: 3px solid var(--green); }
+
+/* ── Complexity Landscape subsection (Section 6) ── */
+.cv-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .95rem;
+  margin: 1.6rem 0;
+}
+.cv-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-left: 4px solid;
+  border-radius: var(--radius);
+  padding: 1.1rem 1.25rem;
+}
+.cv-card-p   { border-left-color: var(--blue); }
+.cv-card-np  { border-left-color: var(--teal); }
+.cv-card-nph { border-left-color: var(--amber); }
+.cv-card-npc { border-left-color: var(--purple); }
+.cv-badge {
+  display: inline-block;
+  font-family: var(--font-ui);
+  font-size: .74rem;
+  font-weight: 700;
+  letter-spacing: .07em;
+  padding: 2px 10px;
+  border-radius: 20px;
+  margin-bottom: .55rem;
+}
+.cv-badge-p   { background: rgba(116,185,255,.17); color: var(--blue); }
+.cv-badge-np  { background: rgba(94,245,208,.13);  color: var(--teal); }
+.cv-badge-nph { background: rgba(255,209,102,.15); color: var(--amber); }
+.cv-badge-npc { background: rgba(192,154,255,.17); color: var(--purple); }
+.cv-name {
+  font-family: var(--font-ui);
+  font-weight: 700;
+  font-size: 1.02rem;
+  margin-bottom: .4rem;
+}
+.cv-def {
+  font-size: .91rem;
+  line-height: 1.65;
+  margin-bottom: .5rem;
+  color: var(--text);
+}
+.cv-eg { font-family: var(--font-mono); font-size: .78rem; color: var(--text-muted); }
+.cv-venn {
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.4rem 1rem .9rem;
+  margin: 1.5rem 0;
+}
+.cv-caption {
+  text-align: center;
+  font-size: .82rem;
+  color: var(--text-dim);
+  margin-top: .75rem;
+  font-style: italic;
+  line-height: 1.55;
+}
+
 </style>
 </head>
 <body>
@@ -3073,6 +3135,181 @@ textarea.ctrl-input { resize: vertical; min-height: 68px; }
       <em>all</em> NP problems do — resolving the P vs. NP question (a $1,000,000 Millennium
       Prize problem open since 1971). No such algorithm is known, and most complexity
       theorists believe none exists.
+    </p>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════
+       SUBSECTION: THE COMPLEXITY LANDSCAPE
+       ══════════════════════════════════════════════════════ -->
+  <h3 class="mt15">The Complexity Landscape: P, NP, NP-Hard, and NP-Complete</h3>
+
+  <p>
+    Before entering the proof, it helps to see exactly where these four classes sit relative
+    to each other. They are routinely conflated in textbooks and casual usage — particularly
+    <strong>NP-Hard</strong> and <strong>NP-Complete</strong>, which are related but
+    meaningfully distinct. The diagram below shows their precise containment relationships;
+    the definitions that follow ground each term formally.
+  </p>
+
+  <!-- Containment diagram -->
+  <div class="cv-venn">
+    <svg viewBox="0 0 720 290" xmlns="http://www.w3.org/2000/svg"
+         style="width:100%;max-width:720px;display:block;margin:0 auto;"
+         role="img"
+         aria-label="Containment diagram: P inside NP, NP-Complete at the intersection of NP and NP-Hard, NP-Hard extending beyond NP">
+      <defs>
+        <!-- Clips the NP-Complete highlight to the NP ellipse boundary -->
+        <clipPath id="cvNpClip">
+          <ellipse cx="290" cy="145" rx="235" ry="118"/>
+        </clipPath>
+      </defs>
+
+      <!-- Canvas -->
+      <rect width="720" height="290" rx="10" fill="#0c0c1a"/>
+      <text x="708" y="21" text-anchor="end" fill="#26264a"
+            font-family="'Exo 2',sans-serif" font-size="11"
+            font-weight="600" letter-spacing="1.8">ALL DECISION PROBLEMS</text>
+
+      <!-- NP-Hard ellipse (dashed amber, extends right beyond NP) -->
+      <ellipse cx="505" cy="145" rx="205" ry="118"
+               fill="rgba(255,209,102,0.07)" stroke="#ffd166"
+               stroke-width="1.8" stroke-dasharray="9,5"/>
+
+      <!-- NP ellipse (solid teal) -->
+      <ellipse cx="290" cy="145" rx="235" ry="118"
+               fill="rgba(94,245,208,0.065)" stroke="#5ef5d0" stroke-width="2"/>
+
+      <!-- NP-Complete region: NP-Hard fill clipped to NP boundary = intersection -->
+      <ellipse cx="505" cy="145" rx="205" ry="118"
+               fill="rgba(192,154,255,0.10)"
+               clip-path="url(#cvNpClip)" stroke="none"/>
+
+      <!-- P ellipse (solid blue, inside NP, left side) -->
+      <ellipse cx="148" cy="145" rx="82" ry="72"
+               fill="rgba(116,185,255,0.13)" stroke="#74b9ff" stroke-width="2"/>
+
+      <!-- LABELS -->
+
+      <!-- P -->
+      <text x="148" y="139" text-anchor="middle" fill="#74b9ff"
+            font-family="'Exo 2',sans-serif" font-size="16" font-weight="800">P</text>
+      <text x="148" y="158" text-anchor="middle" fill="rgba(116,185,255,.72)"
+            font-family="'Exo 2',sans-serif" font-size="10">Poly-time solvable</text>
+
+      <!-- NP -->
+      <text x="278" y="46" text-anchor="middle" fill="#5ef5d0"
+            font-family="'Exo 2',sans-serif" font-size="15" font-weight="800">NP</text>
+      <text x="278" y="64" text-anchor="middle" fill="rgba(94,245,208,.70)"
+            font-family="'Exo 2',sans-serif" font-size="10">Poly-time verifiable</text>
+
+      <!-- NP-intermediate zone hint -->
+      <text x="256" y="141" text-anchor="middle" fill="rgba(94,245,208,.28)"
+            font-family="'Exo 2',sans-serif" font-size="9.5" font-style="italic">NP \ P \ NPC</text>
+      <text x="256" y="155" text-anchor="middle" fill="rgba(94,245,208,.22)"
+            font-family="'Exo 2',sans-serif" font-size="9" font-style="italic">(if P ≠ NP)</text>
+
+      <!-- NP-Complete -->
+      <text x="413" y="134" text-anchor="middle" fill="#c09aff"
+            font-family="'Exo 2',sans-serif" font-size="13" font-weight="700">NP-Complete</text>
+      <text x="413" y="151" text-anchor="middle" fill="rgba(192,154,255,.72)"
+            font-family="'Exo 2',sans-serif" font-size="10">NP ∩ NP-Hard</text>
+
+      <!-- Subset Sum marker -->
+      <circle cx="413" cy="171" r="4.5" fill="#c09aff" opacity=".85"/>
+      <text x="426" y="175" fill="rgba(192,154,255,.82)"
+            font-family="'Exo 2',sans-serif" font-size="9.5" font-style="italic">Subset Sum</text>
+
+      <!-- NP-Hard label (outside NP) -->
+      <text x="627" y="134" text-anchor="middle" fill="#ffd166"
+            font-family="'Exo 2',sans-serif" font-size="13" font-weight="700">NP-Hard</text>
+      <text x="627" y="151" text-anchor="middle" fill="rgba(255,209,102,.70)"
+            font-family="'Exo 2',sans-serif" font-size="10">All NP reduces to it</text>
+
+      <!-- Halting Problem example -->
+      <circle cx="614" cy="172" r="3.5" fill="rgba(255,209,102,.45)"/>
+      <text x="626" y="176" fill="rgba(255,209,102,.50)"
+            font-family="'Exo 2',sans-serif" font-size="9.5" font-style="italic">Halting Problem</text>
+
+      <!-- P ≠ NP footnote -->
+      <text x="360" y="280" text-anchor="middle" fill="#252540"
+            font-family="'Exo 2',sans-serif" font-size="10" font-style="italic">
+        Assumes P ≠ NP. If P = NP, the three inner regions would collapse into one.
+      </text>
+    </svg>
+    <p class="cv-caption">
+      Figure: Containment relationships under the standard assumption P&nbsp;≠&nbsp;NP
+      (unproven but widely believed). NP-Hard problems are at least as hard as every NP
+      problem; those also <em>in</em> NP form the NP-Complete class. The Halting Problem
+      is NP-Hard but undecidable — it is not even in NP.
+    </p>
+  </div>
+
+  <!-- Four-class definition grid -->
+  <div class="cv-grid">
+
+    <div class="cv-card cv-card-p">
+      <span class="cv-badge cv-badge-p">CLASS P</span>
+      <div class="cv-name" style="color:var(--blue);">Polynomial Time</div>
+      <p class="cv-def">
+        Problems <em>solvable</em> by a deterministic algorithm in O(n<sup>k</sup>) time
+        for some constant k. These are the tractable problems — fast enough to scale
+        to large real-world inputs.
+      </p>
+      <div class="cv-eg">e.g. Sorting &middot; Shortest Path &middot; Primality Testing</div>
+    </div>
+
+    <div class="cv-card cv-card-np">
+      <span class="cv-badge cv-badge-np">CLASS NP</span>
+      <div class="cv-name" style="color:var(--teal);">Non-deterministic Polynomial</div>
+      <p class="cv-def">
+        Problems whose solutions can be <em>verified</em> in polynomial time. Every P
+        problem is in NP (solving implies verifying), but NP is potentially much larger.
+        Whether P&nbsp;=&nbsp;NP is the central open question of computer science.
+      </p>
+      <div class="cv-eg">e.g. Subset Sum &middot; 3-SAT &middot; Hamiltonian Path</div>
+    </div>
+
+    <div class="cv-card cv-card-nph">
+      <span class="cv-badge cv-badge-nph">NP-HARD</span>
+      <div class="cv-name" style="color:var(--amber);">At Least as Hard as NP</div>
+      <p class="cv-def">
+        Problems to which every NP problem can be <em>reduced</em> in polynomial time.
+        At least as hard as the hardest problems in NP, but not required to be in NP
+        themselves — some NP-Hard problems are undecidable.
+      </p>
+      <div class="cv-eg">e.g. Halting Problem &middot; TSP Optimization &middot; Subset Sum</div>
+    </div>
+
+    <div class="cv-card cv-card-npc">
+      <span class="cv-badge cv-badge-npc">NP-COMPLETE</span>
+      <div class="cv-name" style="color:var(--purple);">The Hardest Problems in NP</div>
+      <p class="cv-def">
+        The intersection of NP and NP-Hard: problems that are both verifiable in polynomial
+        time <em>and</em> at least as hard as every other NP problem. If any one is
+        solvable in polynomial time, every NP problem is.
+      </p>
+      <div class="cv-eg">e.g. Subset Sum &middot; 3-SAT &middot; Vertex Cover &middot; Clique</div>
+    </div>
+
+  </div>
+
+  <!-- Why complexity classes matter -->
+  <div class="callout amber">
+    <div class="callout-label">&#9670; Why Complexity Classes Matter</div>
+    <p>
+      Without this framework, declaring a problem “hard” is an informal, unprovable claim.
+      These classes make hardness <em>rigorous</em>. Proving Subset Sum is NP-complete
+      achieves two things simultaneously: it provides a mathematical proof that no
+      polynomial-time algorithm exists for it unless P&nbsp;=&nbsp;NP, and it places Subset
+      Sum in a vast equivalence class — one where solving any single member efficiently
+      solves all of them. Hundreds of fundamental problems across scheduling, cryptography,
+      and combinatorics share this fate.
+    </p>
+    <p style="margin-top:.6rem;margin-bottom:0;">
+      This is precisely why the proof that follows requires <strong>two independent
+      parts</strong>: NP membership and NP-hardness. NP-completeness is their conjunction
+      — neither condition alone is sufficient.
     </p>
   </div>
 
